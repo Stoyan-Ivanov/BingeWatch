@@ -1,0 +1,5 @@
+body {
+  background: theme('colors.gray.900');
+  font-family: 'Aeroport', sans-serif;
+  letter-spacing: 1px !important;
+}
