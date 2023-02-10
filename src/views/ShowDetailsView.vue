@@ -1,18 +1,55 @@
 <script setup lang="ts">
 import ShowCard from "@/components/ShowCard.vue";
+import HorizontalScrollContainer from "@/components/kit/HorizontalScrollContainer.vue";
+import ContentSection from "@/components/kit/ContentSection.vue";
+import type TVShow from "@/models/tvShow";
+import type { TVShowDetails } from "@/models/tvShowDetails";
+import showsRepository from "@/repositories/showsRepository";
+import { useTVShowsStore } from "@/stores/useTVShowsStore";
+import { computed, onMounted, ref, type ComputedRef, type Ref } from "vue";
+import ActorCard from "@/components/ActorCard.vue";
+import { IconStarFilled, IconArrowUpRight } from "@tabler/icons-vue";
+
+const { id } = defineProps<{
+  id: number;
+}>();
+
+/**
+ * 🗃 Local storage for storing and handling TV shows
+ */
+const tvShowsStore = useTVShowsStore();
+
+/**
+ * 📦 The TV show for the passed TV show ID
+ */
+const tvShow: ComputedRef<TVShow | undefined> = computed(() =>
+  tvShowsStore.getTVShowById(id)
+);
+
+/**
+ * 📦 The current TV show's details
+ */
+const tvShowDetails: Ref<TVShowDetails | null> = ref(null);
+
+onMounted(async () => {
+  // Fetch details for a specific ID
+  tvShowDetails.value = await showsRepository.getTVShowDetails(id);
+});
 </script>
 
 <template>
   <container class="container">
     <section>
-      <div class="grid grid-cols-2 gap-20">
+      <div class="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-10 lg:gap-20">
         <div class="flex flex-row justify-center">
           <div
-            class="relative h-96 w-full overflow-hidden rounded-3xl bg-component"
+            class="relative h-full w-full overflow-hidden rounded-3xl bg-component"
+            style="min-height: 540px"
           >
             <img
-              class="absolute h-full w-full object-fill"
-              src="https://static.tvmaze.com/uploads/images/medium_portrait/444/1112175.jpg"
+              class="absolute h-full w-full object-cover"
+              :src="tvShow?.image.original"
+              :alt="tvShow?.name"
             />
           </div>
         </div>
@@ -20,62 +57,83 @@ import ShowCard from "@/components/ShowCard.vue";
           <div
             class="flex flex-row items-center rounded-r-full rounded-tl-full bg-component py-1 pr-3 pl-2"
           >
-            <StarIcon class="h-4 w-4 text-yellow-500" />
-            <p class="ml-2 text-xl font-bold text-white">7.5</p>
+            <IconStarFilled class="h-4 w-4 text-accent" />
+            <p class="ml-2 text-lg font-bold text-white md:text-xl">
+              {{ tvShow?.averageRating.toFixed(1) }}
+            </p>
           </div>
 
-          <p class="mt-2 text-4xl font-bold text-white">The Flash</p>
+          <p class="mt-2 text-3xl font-bold text-white md:text-4xl">
+            {{ tvShow?.name }}
+          </p>
 
-          <div class="mt-1 flex flex-row items-center gap-2 text-gray-500">
-            <span>2010</span>
-            <span class="h-1 w-1 rounded-full bg-gray-500" />
-            <span>60m</span>
-            <span class="h-1 w-1 rounded-full bg-gray-500" />
-            <span>5 seasons</span>
+          <div class="mt-1 flex flex-row items-center gap-2 text-secondary">
+            <span>
+              {{ new Date(tvShow ? tvShow.premiered : "").getFullYear() }}
+            </span>
+            <span class="h-1 w-1 rounded-full bg-secondary" />
+            <span>{{ tvShow?.averageRuntimeMinutes }}m</span>
+            <span class="h-1 w-1 rounded-full bg-secondary" />
+            <span>{{ tvShowDetails?.seasonsCount }} seasons</span>
           </div>
 
           <div class="mt-3 flex flex-row gap-3">
             <span
-              v-for="i in 3"
+              v-for="genre in tvShow?.genres"
+              :key="genre"
               class="rounded-lg border px-4 py-1 text-sm text-white"
             >
-              Horror
+              {{ genre }}
             </span>
           </div>
 
-          <p class="mt-5 text-gray-400">
-            <b>Under the Dome</b> is the story of a small town that is suddenly
-            and inexplicably sealed off from the rest of the world by an
-            enormous transparent dome. The town's inhabitants must deal with
-            surviving the post-apocalyptic conditions while searching for
-            answers about the dome, where it came from and if and when it will
-            go away.
-          </p>
+          <p
+            class="md:text-md mt-5 text-sm text-gray-400"
+            v-html="tvShow?.summary"
+          />
 
-          <button
-            class="mt-6 flex h-10 flex-row items-center rounded-full border border-primary px-5 text-primary transition-colors duration-150 hover:bg-primary hover:text-white active:scale-95"
+          <a
+            :href="tvShow?.officialWebsite"
+            target="_blank"
+            class="button mt-6 flex h-10 flex-row items-center rounded-full border border-primary px-5 text-primary transition-colors duration-150 hover:bg-primary hover:text-white active:scale-95"
           >
             <span>Official Website</span>
-            <ArrowUpRightIcon class="ml-1 h-5 w-5" />
-          </button>
+            <IconArrowUpRight class="ml-1 h-5 w-5" />
+          </a>
         </div>
       </div>
     </section>
 
-    <section class="mt-16">
-      <p class="text-xl font-semibold text-white">Cast</p>
+    <section class="mt-20">
+      <p class="text-xl font-semibold text-white">{{ tvShow?.name }} Cast</p>
 
-      <div class="mt-5 grid h-60 grid-cols-5 gap-4">
-        <div v-for="i in 5" class="relative w-full rounded-3xl bg-component" />
+      <div class="mt-5 grid grid-cols-3 gap-5 sm:grid-cols-4 md:grid-cols-6">
+        <ActorCard
+          class="h-48 md:h-56"
+          v-for="actor in tvShowDetails?.cast"
+          :key="actor.name"
+          :name="actor.name"
+          :showName="tvShow?.name"
+          :imageUrl="actor.image.medium"
+        />
       </div>
     </section>
 
-    <section class="mt-16">
+    <ContentSection>
       <p class="text-xl font-semibold text-white">You might also like</p>
 
-      <div class="mt-5 grid h-60 grid-cols-5 gap-4">
-        <ShowCard v-for="i in 5" />
-      </div>
-    </section>
+      <HorizontalScrollContainer class="mt-5">
+        <ShowCard
+          class="mx-2 inline-flex h-60 w-48 shadow-lg"
+          v-for="tvShow in tvShowsStore.getSimilarShows(id)"
+          :key="tvShow.name"
+          :id="tvShow.id"
+          :name="tvShow.name"
+          :premiered="tvShow.premiered"
+          :rating="tvShow.averageRating"
+          :image-url="tvShow.image.medium"
+        />
+      </HorizontalScrollContainer>
+    </ContentSection>
   </container>
 </template>

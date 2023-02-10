@@ -3,3 +3,26 @@ body {
   font-family: 'Aeroport', sans-serif;
   letter-spacing: 1px !important;
 }
+
+::-webkit-scrollbar {
+  width: 15px;
+  height: 15px;
+  border-radius: 32px;
+}
+
+::-webkit-scrollbar-track-piece {
+  border-radius: 30px;
+  background-color: theme('colors.gray.800');
+}
+
+::-webkit-scrollbar-thumb:vertical {
+  height: 30px;
+  border-radius: 30px;
+  background-color: theme('colors.gray.700');
+}
+
+::-webkit-scrollbar-thumb:horizontal {
+  width: 30px;
+  border-radius: 30px;
+  background-color: theme('colors.gray.700');
+}

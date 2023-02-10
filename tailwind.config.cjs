@@ -9,6 +9,9 @@ module.exports = {
         primary: "#FF4343",
         base: colors.gray[900],
         component: colors.gray[800],
+        componentHover: colors.gray[700],
+        secondary: colors.gray[400],
+        accent: colors.yellow[500]
       },
     },
   },
