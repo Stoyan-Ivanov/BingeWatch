@@ -3,6 +3,18 @@ Welcome to BingeWatch - the best place fo find binge-worthy TV series. 📺🍿
 
 ![Hero Section - Ho Page](./public/screenshots/hero.png)
 
+## Quick Start
+In order to start the project you should run the following commands in the base project folder:
+
+```bash
+# Install all dependencies
+npm install
+
+# Start server
+npm run dev
+```
+You should be able to access the project on [http://localhost:8080](http://localhost:8080)
+
 ## Dependencies
 - [Vue 3](https://vuejs.org/)
 - [Vue Router](https://router.vuejs.org/)
