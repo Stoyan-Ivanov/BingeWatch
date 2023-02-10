@@ -1,52 +1,67 @@
-# BingeWatch
+# Documentation
+Welcome to BingeWatch - the best place fo find binge-worthy TV series. 📺🍿
 
-This template should help get you started developing with Vue 3 in Vite.
+![Hero Section - Ho Page](./public/screenshots/hero.png)
 
-## Recommended IDE Setup
+## Dependencies
+- [Vue 3](https://vuejs.org/)
+- [Vue Router](https://router.vuejs.org/)
+- [Pinia](https://pinia.vuejs.org/) + [Pinia Persisted State](https://prazdevs.github.io/pinia-plugin-persistedstate/)
+- [Tailwind CSS](https://tailwindcss.com)
+- [Tabler Icons](https://tabler-icons.io/)
+- [Vue3 Click Away](https://github.com/VinceG/vue-click-away)
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
 
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
-
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
-
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
+## Project Structure
+The project is divided in the following structure:
+```text
+├─ src
+│  ├─ assets        // Assets such as images and CSS
+│  ├─ components    // Universal Vue components.
+│  ├─ models        // Data models - classes and interfaces
+│  ├─ repositories  // Repositories that execute API calls
+│  ├─ router        // Router configuration
+│  ├─ utils         // General utility classes
+│  ├─ stores        // Pinia stores
+│  └─ views         // Pages
 ```
 
-### Compile and Hot-Reload for Development
+## Components
+The components folder is hosts reusable components that are used throughout the project
+- `/` - hosts specific components like Header, Footer, Search bar, etc. that can be reused
+- `/kit` - hosts generic components like sections, dropdowns etc. 
 
-```sh
-npm run dev
+
+## Views
+The project is divided into 2 main views - "Home", "Show Details"
+```text
+├─ views
+│  ├─ HomeView.vue           // Shows a catalog of TV shows divided into categories
+│  ├─ ShowDetailsView.vue    // Shows the details of a specific TV show
 ```
 
-### Type-Check, Compile and Minify for Production
+#### Home
+The entry point of the website which displays a catalog of curated TV shows divided into categories.
 
-```sh
-npm run build
-```
+![Home Page](./public/screenshots/home.png)
+![Home Seach](./public/screenshots/search.png)
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+#### Show Details
+A view which aims to provide details related to specific TV show
 
-```sh
-npm run test:unit
-```
+![Show Details Page](./public/screenshots/show-details.png)
 
-### Lint with [ESLint](https://eslint.org/)
+## Styling
+All components and views are created from scratch, styled using **Tailwind CSS**, and based on the native elements
 
-```sh
-npm run lint
-```
+## Storage
+To persist data required for the application to run the project uses:
+- `Pinia` - the new "go-to" state management library introduced by the Vue.js
+- `Local Storage (with the Pinia Data Persistence Plugin)` - allows the Pinia stores to be serialized and persisted. This way, the available state data can be accessed after a refresh or browser tab close event.
+
+Currently the storage has the following stores:
+- `tvShows` - stores and manages the TV shows fetched from an external API
+
+
+#### Data Fetching
+In order to fetch the countries data the project uses the native [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
