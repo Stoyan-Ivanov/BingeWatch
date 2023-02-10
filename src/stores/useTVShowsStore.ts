@@ -48,7 +48,10 @@ export const useTVShowsStore = defineStore(
      */
     const twoRandomShows: ComputedRef<TVShow[]> = computed(() => {
       const randomNum = randomIntFromInterval(0, tvShows.value.length - 1);
-      return new Array<TVShow>(tvShows.value[randomNum], tvShows.value[randomNum + 1]);
+      return new Array<TVShow>(
+        tvShows.value[randomNum],
+        tvShows.value[randomNum + 1]
+      );
     });
 
     /**
@@ -113,7 +116,9 @@ export const useTVShowsStore = defineStore(
           break;
         }
       }
-      return Array.from(new Set(similarTVShows)).slice(0, similarShowsGoal);
+      return Array.from(new Set(similarTVShows))
+        .filter((show: TVShow) => show.name != currentTVShow.name)
+        .slice(0, similarShowsGoal);
     }
 
     onMounted(fetchTVShows);
