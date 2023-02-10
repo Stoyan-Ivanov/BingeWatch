@@ -76,4 +76,4 @@ Currently the storage has the following stores:
 
 
 #### Data Fetching
-In order to fetch the countries data the project uses the native [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
+In order to fetch the available TV shows the project uses the native [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
